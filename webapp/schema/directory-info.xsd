@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
+
+	<!-- This tells JAXB what package to create the Java classes in. -->
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:schemaBindings>
+				<jaxb:package name="karstenroethig.filetags.webapp.domain"/>
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:element name="directoryInfo">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="tags"  minOccurs="0" maxOccurs="1"/>
+				<xsd:element ref="files" minOccurs="0" maxOccurs="1"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="tags">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="files">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="file" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="tag">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xsd:string" use="required"/>
+			<xsd:attribute name="type" type="tagType"    use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="file">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xsd:string"  use="required"/>
+			<xsd:attribute name="path" type="xsd:string"  use="optional"/>
+			<xsd:attribute name="size" type="xsd:integer" use="required"/>
+			<xsd:attribute name="hash" type="xsd:string"  use="required"/>
+			<xsd:attribute name="tags" type="xsd:string"  use="optional"/>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:simpleType name="tagType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CATEGORY"/>
+			<xsd:enumeration value="PERSON"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+</xsd:schema>

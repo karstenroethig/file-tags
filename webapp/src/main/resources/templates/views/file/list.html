@@ -1,0 +1,118 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+	<title th:text="#{file.label.plural}"></title>
+
+	<!-- Select2 -->
+	<link rel="stylesheet" th:href="@{'/webjars/select2/'+#{application.dependency.select2}+'/css/select2.min.css'}"/>
+</head>
+<body th:with="menu='file'">
+
+	<div layout:fragment="content">
+
+		<div class="container">
+
+			<div class="card" style="margin-top: 10px;">
+				<h5 class="card-header">Search</h5>
+				<div class="card-body">
+					<form th:object="${searchParams}" th:action="@{/file/search}" action="#" method="post">
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label>Tags</label>
+								<select th:field="*{tags}" class="form-control select2-multiple" size="4" multiple="multiple">
+									<optgroup
+										th:each="ty : ${T(karstenroethig.filetags.webapp.dto.enums.TagTypeEnum).values()}"
+										th:if="${allTags.hasTagsForType(ty)}"
+										th:label="${#messages.msg('tag.type.'+ty.name()+'.label')}" label="[type]">
+										<option th:each="tag : ${allTags.getTagsByType(ty)}" th:value="${{tag}}" th:text="${tag.name}">[name]</option>
+									</optgroup>
+								</select>
+							</div>
+							<div class="form-group col-md-6">
+								<label>Filename</label>
+								<input type="text" th:field="*{filename}" class="form-control">
+							</div>
+						</div>
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<table class="table table-hover mt-5">
+				<tbody>
+					<tr th:if="${#lists.isEmpty(page.files)}">
+						<td align="center" th:text="#{default.table.empty.text}">Data can not be found.</td>
+					</tr>
+					<tr th:each="file : ${page.files}">
+						<td>
+							<div th:if="${file.pathToDir != null}" class="text-muted" th:text="${file.pathToDir}">[pathToDir]</div>
+							<div class="lead">
+								<strong th:text="${file.filename}">[filename]</strong>
+								<span th:if="${file.isNew()}" class="badge badge-pill badge-warning">new</span>
+							</div>
+							<div>
+								<a class="popoverAddTag text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" data-content="<form class='form-inline'><div class='form-group'><input class='form-control form-control-sm' type='text' id='addTagInput'></div>&nbsp;<div class='form-group'><button type='button' class='btn btn-primary btn-sm'>OK</button></div></form>" data-original-title="Add tag">add tag</a>
+								&nbsp;
+								<a class="popoverRename text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" data-content="<input type='text' id='renameInput'>" data-original-title="Rename">rename</a>
+								&nbsp;
+								<a class="popoverMove text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" data-content="<input type='text' id='moveInput'>" data-original-title="Move">move</a>
+							</div>
+							<div>
+								<a href="#" class="badge badge-pill badge-success" style="text-decoration: none;">Test 1</a>
+								<a href="#" class="badge badge-pill badge-success" style="text-decoration: none;">Test 2</a>
+								<a href="#" class="badge badge-pill badge-danger" style="text-decoration: none;">1 Test</a>
+								<a href="#" class="badge badge-pill badge-danger" style="text-decoration: none;">2 Test</a>
+								<a href="#" class="badge badge-pill badge-danger" style="text-decoration: none;">3 Test</a>
+							</div>
+						</td>
+						<td class="text-right">
+							<button type="button" class="btn btn-primary"><i class="fas fa-play"></i></button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div th:if="${page.hasEntries()}" class="mb-3">
+				<a th:if="${page.hasPreviousPage()}" th:href="@{/file/page/{page}(page=${page.currentPageNumber-1})}" class="btn btn-outline-primary">Previous</a>
+				<button th:if="${!page.hasPreviousPage()}" type="button" class="btn btn-outline-primary disabled">Previous</button>
+
+				<a th:if="${page.hasNextPage()}" th:href="@{/file/page/{page}(page=${page.currentPageNumber+1})}" class="btn btn-outline-primary">Next</a>
+				<button th:if="${!page.hasNextPage()}" type="button" class="btn btn-outline-primary disabled">Next</button>
+			</div>
+		</div>
+
+	</div>
+
+	<div layout:fragment="additionalJs">
+		<!-- Select2 -->
+		<script th:src="@{'/webjars/select2/'+#{application.dependency.select2}+'/js/select2.min.js'}"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.select2-multiple').select2({
+					'allowClear': true
+				});
+
+				$('[data-toggle="popover"]').popover({
+					html: true
+				});
+
+				$('[data-toggle=popover]').on('click', function (e) {
+					$('[data-toggle=popover]').not(this).popover('hide');
+				});
+				$('.popoverAddTag').on('shown.bs.popover', function () {
+					$('#addTagInput').val('Test');
+				});
+				$('.popoverRename').on('shown.bs.popover', function () {
+					$('#renameInput').val('Test');
+				});
+				$('.popoverMove').on('shown.bs.popover', function () {
+					$('#moveInput').val('Test');
+				});
+			});
+		</script>
+	</div>
+
+</body>
+</html>

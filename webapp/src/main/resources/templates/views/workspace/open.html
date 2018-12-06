@@ -1,0 +1,32 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+</head>
+<body th:with="menu='workspace'">
+
+	<div layout:fragment="content">
+
+		<div class="container">
+
+			<div class="card" style="margin-top: 10px;">
+				<h5 class="card-header">Select a directory as workspace</h5>
+				<div class="card-body">
+					<form th:object="${workspace}" th:action="@{/workspace/open}" action="#" method="post">
+						<div class="form-group" th:classappend="${#fields.hasErrors('pathToDir')} ? has-error">
+							<label>Workspace</label>
+							<input type="text" th:field="*{pathToDir}" class="form-control">
+							<small class="help-block" th:if="${#fields.hasErrors('pathToDir')}" th:each="err : ${#fields.errors('pathToDir')}" th:text="${err}">validation error</small>
+						</div>
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary">Open</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>
