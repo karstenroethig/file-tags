@@ -92,7 +92,6 @@ public class TagController
 			if (tagService.save(tag) != null)
 			{
 				redirectAttributes.addFlashAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithSuccess(MessageKeyEnum.TAG_SAVE_SUCCESS, tag.getName()));
-
 				return UrlMappings.redirect(UrlMappings.CONTROLLER_TAG, UrlMappings.ACTION_LIST);
 			}
 		}

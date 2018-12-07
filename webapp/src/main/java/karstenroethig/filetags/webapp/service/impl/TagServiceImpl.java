@@ -1,5 +1,6 @@
 package karstenroethig.filetags.webapp.service.impl;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +79,7 @@ public class TagServiceImpl
 
 	public List<TagDto> findAll()
 	{
-		return TAGS_BY_ID.values().stream().sorted(Comparator.comparing(TagDto::getName)).collect(Collectors.toList());
+		return TAGS_BY_ID.values().stream().sorted(Comparator.comparing(TagDto::getType).thenComparing(TagDto::getName)).collect(Collectors.toList());
 	}
 
 	public TagTypeWrapper findAllGroupedByType()
@@ -98,5 +99,10 @@ public class TagServiceImpl
 		TAGS_BY_ID.clear();
 		TAGS_BY_NAME.clear();
 		ID_GENARATOR.set(0);
+	}
+
+	protected void sort(List<TagDto> tags)
+	{
+		Collections.sort(tags, Comparator.comparing(TagDto::getType).thenComparing(TagDto::getName));
 	}
 }

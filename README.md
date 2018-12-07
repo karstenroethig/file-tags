@@ -1,25 +1,21 @@
-File Tags
-=========
+# File Tags
 
 A spring boot web application for tagging files.
 
 
-Requirements
-------------
+## Requirements
 
 * Java SDK 1.8+
 * Maven 3.5.x ([http://maven.apache.org](http://maven.apache.org))
 * Optional: Lombok ([https://projectlombok.org/](https://projectlombok.org/)) (only if you use an IDE like Eclipse)
 
 
-IDE Support
------------
+## IDE Support
 
 To use these projects in an IDE you will need the [project Lombok](https://projectlombok.org/) agent. Full instructions can be found in the Lombok website. The sign that you need to do this is a lot of compiler errors to do with missing methods and fields.
 
 
-Build the installation package
-------------------------------
+## Build the installation package
 
 1. Install Java and create a `JAVA_HOME` environment variable that points to the location of your JDK
 
@@ -40,8 +36,7 @@ Build the installation package
 4. Navigate to `distribution/target` where you find the `FileTags_V[VERSION].zip`
 
 
-Run
----
+## Run
 
 1. Create a installation directory
 
@@ -62,3 +57,14 @@ Run
 	`bin/run`
 
 6. Browse to [http://localhost:4080/](http://localhost:4080/)
+
+
+## Enable links to local files in Mozilla Firefox
+
+1. Open [about:config](about:config) in Firefox
+
+2. Add the following key-value pairs:
+
+	capability.policy.policynames=localfilelinks
+	capability.policy.localfilelinks.sites=http://localhost:4080
+	capability.policy.localfilelinks.checkloaduri.enabled=allAccess

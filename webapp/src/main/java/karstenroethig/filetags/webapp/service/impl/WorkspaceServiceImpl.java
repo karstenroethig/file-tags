@@ -1,5 +1,6 @@
 package karstenroethig.filetags.webapp.service.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -55,11 +56,11 @@ public class WorkspaceServiceImpl
 		return SELECTED_WORKSPACE != null;
 	}
 
-	public void open(WorkspaceDto workspace) throws JAXBException
+	public void open(WorkspaceDto workspace) throws JAXBException, FileNotFoundException
 	{
 		Path pathToWorkspace = Paths.get(workspace.getPathToDir());
 		if (!Files.exists(pathToWorkspace) || !Files.isDirectory(pathToWorkspace))
-			return;
+			throw new FileNotFoundException("directory does not exist: " + pathToWorkspace.toString());
 
 		SELECTED_WORKSPACE = workspace;
 
@@ -133,10 +134,11 @@ public class WorkspaceServiceImpl
 		if (tagNames != null)
 			for (String tagName : tagNames)
 			{
-				TagDto tag = tagService.findByName(tagName);
+				TagDto tag = tagService.findByName(StringUtils.trim(tagName));
 				if (tag != null)
 					fileDto.addTag(tag);
 			}
+		tagService.sort(fileDto.getTags());
 
 		return fileDto;
 	}
@@ -263,6 +265,8 @@ public class WorkspaceServiceImpl
 		{
 			for (TagDto tag : oldFileDto.getTags())
 				fileDto.addTag(tag);
+
+			tagService.sort(fileDto.getTags());
 		}
 
 		return fileDto;

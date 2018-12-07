@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum TagTypeEnum
 {
-	CATEGORY("badge-secondary"),
-	PERSON("badge-info");
+	PERSON("badge-primary"),
+	CATEGORY("badge-light");
 
 	private String styleClass;
 

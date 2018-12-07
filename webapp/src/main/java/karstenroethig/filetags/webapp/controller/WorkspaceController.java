@@ -1,5 +1,7 @@
 package karstenroethig.filetags.webapp.controller;
 
+import java.io.FileNotFoundException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import karstenroethig.filetags.webapp.controller.util.UrlMappings;
 import karstenroethig.filetags.webapp.controller.util.ViewEnum;
 import karstenroethig.filetags.webapp.dto.WorkspaceDto;
 import karstenroethig.filetags.webapp.service.impl.WorkspaceServiceImpl;
+import karstenroethig.filetags.webapp.util.MessageKeyEnum;
+import karstenroethig.filetags.webapp.util.Messages;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,43 +42,62 @@ public class WorkspaceController
 	@RequestMapping(value = UrlMappings.ACTION_OPEN, method = RequestMethod.POST)
 	public String open(@ModelAttribute("workspace") @Valid WorkspaceDto workspace, BindingResult bindingResult, final RedirectAttributes redirectAttributes, Model model)
 	{
+		if (bindingResult.hasErrors())
+		{
+			model.addAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithError(MessageKeyEnum.WORKSPACE_OPEN_INVALID));
+			return ViewEnum.WORKSPACE_OPEN.getViewName();
+		}
+
 		try
 		{
 			workspaceService.open(workspace);
 		}
+		catch (FileNotFoundException ex)
+		{
+			bindingResult.rejectValue("pathToDir", "workspace.open.invalid.directoryNotFound");
+			model.addAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithError(MessageKeyEnum.WORKSPACE_OPEN_INVALID));
+			return ViewEnum.WORKSPACE_OPEN.getViewName();
+		}
 		catch (Exception ex)
 		{
-			log.error("error", ex);
+			log.error("error on opening workspace", ex);
+			model.addAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithError(MessageKeyEnum.WORKSPACE_OPEN_ERROR));
+			return ViewEnum.WORKSPACE_OPEN.getViewName();
 		}
 
+		redirectAttributes.addFlashAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithSuccess(MessageKeyEnum.WORKSPACE_OPEN_SUCCESS));
 		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
 	}
 
 	@RequestMapping(value = UrlMappings.ACTION_SYNC, method = RequestMethod.GET)
-	public String sync(Model model)
+	public String sync(final RedirectAttributes redirectAttributes, Model model)
 	{
 		try
 		{
 			workspaceService.sync();
+			redirectAttributes.addFlashAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithSuccess(MessageKeyEnum.WORKSPACE_SYNC_SUCCESS));
 		}
 		catch (Exception ex)
 		{
-			log.error("error", ex);
+			log.error("error on synchronizing workspace", ex);
+			redirectAttributes.addFlashAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithError(MessageKeyEnum.WORKSPACE_SYNC_ERROR));
 		}
 
 		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
 	}
 
 	@RequestMapping(value = UrlMappings.ACTION_SAVE, method = RequestMethod.GET)
-	public String save(Model model)
+	public String save(final RedirectAttributes redirectAttributes, Model model)
 	{
 		try
 		{
 			workspaceService.save();
+			redirectAttributes.addFlashAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithSuccess(MessageKeyEnum.WORKSPACE_SAVE_SUCCESS));
 		}
 		catch (Exception ex)
 		{
-			log.error("error", ex);
+			log.error("error on saving workspace", ex);
+			redirectAttributes.addFlashAttribute(Messages.ATTRIBUTE_NAME, Messages.createWithError(MessageKeyEnum.WORKSPACE_SAVE_ERROR));
 		}
 
 		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);

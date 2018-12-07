@@ -27,7 +27,7 @@
 					<tr th:each="tag : ${tags}">
 						<td th:text="${tag.name}">[name]</td>
 						<td>
-							<span class="badge" th:classappend="${tag.type.styleClass}" th:text="${#messages.msg('tag.type.'+tag.type.name()+'.label')}">[type]</span>
+							<a class="badge badge-pill" th:classappend="${tag.type.styleClass}" style="text-decoration: none;" th:text="${#messages.msg('tag.type.'+tag.type.name()+'.label')}">[type]</a>
 						</td>
 						<td>
 							<a th:href="@{/tag/edit/{id}(id=${tag.id})}" th:text="#{default.button.edit.label}">Edit</a> |

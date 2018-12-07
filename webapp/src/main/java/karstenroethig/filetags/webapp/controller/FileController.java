@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import karstenroethig.filetags.webapp.bean.FilesSearchBean;
 import karstenroethig.filetags.webapp.controller.util.UrlMappings;
 import karstenroethig.filetags.webapp.controller.util.ViewEnum;
+import karstenroethig.filetags.webapp.dto.FileAddTagsDto;
 import karstenroethig.filetags.webapp.dto.FileSearchDto;
 import karstenroethig.filetags.webapp.service.impl.FileServiceImpl;
 import karstenroethig.filetags.webapp.service.impl.TagServiceImpl;
@@ -75,5 +76,12 @@ public class FileController
 		model.addAttribute("searchParams", searchParams);
 
 		return ViewEnum.FILE_LIST.getViewName();
+	}
+
+	@RequestMapping(value = "/add-tag", method = RequestMethod.POST)
+	public String addTag(@ModelAttribute("fileAddTags") FileAddTagsDto fileAddTags, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model)
+	{
+		fileService.addTags(fileAddTags);
+		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
 	}
 }
