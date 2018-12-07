@@ -3,6 +3,32 @@
 <head>
 	<!-- Select2 -->
 	<link rel="stylesheet" th:href="@{'/webjars/select2/'+#{application.dependency.select2}+'/css/select2.min.css'}"/>
+	<style>
+		.select2-container--default .select2-selection--multiple .select2-selection__choice {
+			background-color: #DF691A;
+			color: #FFFFFF;
+			border: 0;
+			border-radius: 0;
+		}
+
+		.select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
+			color: lightgrey;
+		}
+
+		.select2-container--default .select2-selection--multiple .select2-selection__clear {
+			color: lightgrey;
+		}
+
+		.select2-container {
+			color: #495057;
+		}
+
+		.select2-container--default .select2-selection--multiple,
+		.select2-container--default .select2-selection--multiple .select2-selection__choice {
+			border: 1px solid transparent;
+			border-radius: 0;
+		}
+	</style>
 </head>
 <body th:with="menu='file'">
 

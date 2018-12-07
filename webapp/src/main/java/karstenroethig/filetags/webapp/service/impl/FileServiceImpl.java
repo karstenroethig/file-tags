@@ -58,7 +58,7 @@ public class FileServiceImpl
 			}
 			catch (FileAlreadyExistsException ex)
 			{
-				log.error("error", ex);
+				log.warn(String.format("file already exists [%s, %s, %s]", file.getFilename(), file.getHash(), file.getPathToDir()));
 			}
 		}
 	}

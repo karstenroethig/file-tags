@@ -151,6 +151,7 @@ public class WorkspaceServiceImpl
 			List<FileDto> newFiles = Files.walk(pathToWorkspace, FileVisitOption.FOLLOW_LINKS)
 					.sorted(Comparator.reverseOrder())
 					.filter(path -> include(path))
+					.peek(path -> log.info("loading file " + path.toString()))
 					.map(path -> transform(pathToWorkspace, path))
 					.collect(Collectors.toList());
 
