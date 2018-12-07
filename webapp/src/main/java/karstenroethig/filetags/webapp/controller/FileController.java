@@ -17,15 +17,15 @@ import karstenroethig.filetags.webapp.bean.FilesSearchBean;
 import karstenroethig.filetags.webapp.controller.util.UrlMappings;
 import karstenroethig.filetags.webapp.controller.util.ViewEnum;
 import karstenroethig.filetags.webapp.dto.FileSearchDto;
+import karstenroethig.filetags.webapp.service.impl.FileServiceImpl;
 import karstenroethig.filetags.webapp.service.impl.TagServiceImpl;
-import karstenroethig.filetags.webapp.service.impl.WorkspaceServiceImpl;
 
 @ComponentScan
 @Controller
 @RequestMapping(UrlMappings.CONTROLLER_FILE)
 public class FileController
 {
-	@Autowired WorkspaceServiceImpl workspaceService;
+	@Autowired FileServiceImpl fileService;
 	@Autowired TagServiceImpl tagService;
 
 	@Autowired FilesSearchBean filesSearchBean;
@@ -70,8 +70,8 @@ public class FileController
 
 	private String executeSearch(Model model, FileSearchDto searchParams, int page)
 	{
-		model.addAttribute("page", workspaceService.find(searchParams, page));
-		model.addAttribute("allTags", tagService.getAllTagsByType());
+		model.addAttribute("page", fileService.find(searchParams, page));
+		model.addAttribute("allTags", tagService.findAllGroupedByType());
 		model.addAttribute("searchParams", searchParams);
 
 		return ViewEnum.FILE_LIST.getViewName();

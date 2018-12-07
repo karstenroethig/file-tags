@@ -37,7 +37,7 @@ public class TagController
 	@RequestMapping(value = UrlMappings.ACTION_LIST, method = RequestMethod.GET)
 	public String list(Model model)
 	{
-		model.addAttribute("tags", tagService.getAllTags());
+		model.addAttribute("tags", tagService.findAll());
 		return ViewEnum.TAG_LIST.getViewName();
 	}
 

@@ -71,12 +71,17 @@ public class TagServiceImpl
 		return TAGS_BY_ID.get(id);
 	}
 
-	public List<TagDto> getAllTags()
+	public TagDto findByName(String name)
+	{
+		return TAGS_BY_NAME.get(name);
+	}
+
+	public List<TagDto> findAll()
 	{
 		return TAGS_BY_ID.values().stream().sorted(Comparator.comparing(TagDto::getName)).collect(Collectors.toList());
 	}
 
-	public TagTypeWrapper getAllTagsByType()
+	public TagTypeWrapper findAllGroupedByType()
 	{
 		TagTypeWrapper tagTypeWrapper = new TagTypeWrapper();
 
@@ -86,5 +91,12 @@ public class TagServiceImpl
 		}
 
 		return tagTypeWrapper;
+	}
+
+	protected void clear()
+	{
+		TAGS_BY_ID.clear();
+		TAGS_BY_NAME.clear();
+		ID_GENARATOR.set(0);
 	}
 }

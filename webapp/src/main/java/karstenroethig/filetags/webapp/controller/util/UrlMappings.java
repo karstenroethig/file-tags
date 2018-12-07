@@ -25,6 +25,7 @@ public class UrlMappings
 	public static final String ACTION_UPDATE = "/update";
 
 	public static final String ACTION_OPEN = "/open";
+	public static final String ACTION_SYNC = "/sync";
 
 	private UrlMappings()
 	{

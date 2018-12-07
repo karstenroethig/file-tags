@@ -16,6 +16,9 @@ import karstenroethig.filetags.webapp.controller.util.UrlMappings;
 import karstenroethig.filetags.webapp.controller.util.ViewEnum;
 import karstenroethig.filetags.webapp.dto.WorkspaceDto;
 import karstenroethig.filetags.webapp.service.impl.WorkspaceServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 
 @ComponentScan
 @Controller
@@ -35,7 +38,44 @@ public class WorkspaceController
 	@RequestMapping(value = UrlMappings.ACTION_OPEN, method = RequestMethod.POST)
 	public String open(@ModelAttribute("workspace") @Valid WorkspaceDto workspace, BindingResult bindingResult, final RedirectAttributes redirectAttributes, Model model)
 	{
-		workspaceService.selectWorkspace(workspace);
+		try
+		{
+			workspaceService.open(workspace);
+		}
+		catch (Exception ex)
+		{
+			log.error("error", ex);
+		}
+
+		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
+	}
+
+	@RequestMapping(value = UrlMappings.ACTION_SYNC, method = RequestMethod.GET)
+	public String sync(Model model)
+	{
+		try
+		{
+			workspaceService.sync();
+		}
+		catch (Exception ex)
+		{
+			log.error("error", ex);
+		}
+
+		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
+	}
+
+	@RequestMapping(value = UrlMappings.ACTION_SAVE, method = RequestMethod.GET)
+	public String save(Model model)
+	{
+		try
+		{
+			workspaceService.save();
+		}
+		catch (Exception ex)
+		{
+			log.error("error", ex);
+		}
 
 		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
 	}

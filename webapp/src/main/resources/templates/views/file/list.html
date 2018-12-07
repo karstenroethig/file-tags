@@ -1,8 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
-	<title th:text="#{file.label.plural}"></title>
-
 	<!-- Select2 -->
 	<link rel="stylesheet" th:href="@{'/webjars/select2/'+#{application.dependency.select2}+'/css/select2.min.css'}"/>
 </head>
@@ -59,16 +57,12 @@
 								&nbsp;
 								<a class="popoverMove text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" data-content="<input type='text' id='moveInput'>" data-original-title="Move">move</a>
 							</div>
-							<div>
-								<a href="#" class="badge badge-pill badge-success" style="text-decoration: none;">Test 1</a>
-								<a href="#" class="badge badge-pill badge-success" style="text-decoration: none;">Test 2</a>
-								<a href="#" class="badge badge-pill badge-danger" style="text-decoration: none;">1 Test</a>
-								<a href="#" class="badge badge-pill badge-danger" style="text-decoration: none;">2 Test</a>
-								<a href="#" class="badge badge-pill badge-danger" style="text-decoration: none;">3 Test</a>
+							<div th:if="${!#lists.isEmpty(file.tags)}">
+								<a th:each="tag : ${file.tags}" href="#" class="badge badge-pill" th:classappend="${tag.type.styleClass}" style="text-decoration: none;" th:text="${tag.name}">[tag.name]</a>
 							</div>
 						</td>
 						<td class="text-right">
-							<button type="button" class="btn btn-primary"><i class="fas fa-play"></i></button>
+							<a th:href="${file.fileUrl}" class="btn btn-primary"><i class="fas fa-play"></i></a>
 						</td>
 					</tr>
 				</tbody>
