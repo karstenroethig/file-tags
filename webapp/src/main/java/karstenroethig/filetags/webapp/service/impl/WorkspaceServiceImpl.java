@@ -125,7 +125,7 @@ public class WorkspaceServiceImpl
 
 		FileDto fileDto = new FileDto();
 		fileDto.setFilename(file.getName());
-		fileDto.setPathToDir(file.getPath());
+		fileDto.setPathToDir(file.getPath() != null ? StringUtils.replace(file.getPath().toString(), "/", " / ") : null);
 		fileDto.setSize(file.getSize().longValue());
 		fileDto.setHash(file.getHash());
 		fileDto.setFileUrl(pathToFile.toUri().toString());
@@ -232,7 +232,7 @@ public class WorkspaceServiceImpl
 	{
 		File file = OBJECT_FACTORY.createFile();
 		file.setName(fileDto.getFilename());
-		file.setPath(fileDto.getPathToDir());
+		file.setPath(fileDto.getPathToDir() != null ? StringUtils.replace(fileDto.getPathToDir(), " / ", "/") : null);
 		file.setSize(BigInteger.valueOf(fileDto.getSize()));
 		file.setHash(fileDto.getHash());
 		file.setTags(String.join(",", fileDto.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toList())));
