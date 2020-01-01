@@ -1,26 +1,29 @@
 <!doctype html>
-<html>
-	<head>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:fragment="layout-fragment (title, content, additionalStyles, additionalJs, menu)">
+<head>
 
-		<title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE" th:text="#{application.name}"></title>
-		
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<link rel="shortcut icon" th:href="@{/images/favicon.ico}"/>
+	<title th:replace="${title}"></title>
 
-		<link th:replace="fragments/style"/>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico}"/>
 
-	</head>
-	
-	<body>
+	<link th:replace="~{fragments/style :: style-fragment}"/>
 
-		<div th:replace="fragments/header"></div>
+	<th:block th:replace="${additionalStyles} ?: ~{}"></th:block>
 
-		<div layout:fragment="content"></div>
+</head>
+<body>
 
-		<div th:replace="fragments/js"></div>
-		<div layout:fragment="additionalJs"></div>
+	<div th:replace="~{fragments/header :: header-fragment(${menu})}"></div>
 
-	</body>
+	<div th:replace="${content}"></div>
+
+	<div th:replace="~{fragments/js :: js-fragment}"></div>
+
+	<th:blcok th:replace="${additionalJs} ?: ~{}"></th:block>
+
+</body>
 </html>

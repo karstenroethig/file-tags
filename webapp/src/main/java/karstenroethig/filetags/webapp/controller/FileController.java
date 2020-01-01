@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import karstenroethig.filetags.webapp.bean.FilesSearchBean;
+import karstenroethig.filetags.webapp.controller.exceptions.NotFoundException;
 import karstenroethig.filetags.webapp.controller.util.UrlMappings;
 import karstenroethig.filetags.webapp.controller.util.ViewEnum;
 import karstenroethig.filetags.webapp.dto.FileAddTagsDto;
+import karstenroethig.filetags.webapp.dto.FileDto;
 import karstenroethig.filetags.webapp.dto.FileSearchDto;
+import karstenroethig.filetags.webapp.dto.TagDto;
 import karstenroethig.filetags.webapp.service.impl.FileServiceImpl;
 import karstenroethig.filetags.webapp.service.impl.TagServiceImpl;
 
@@ -83,5 +86,30 @@ public class FileController
 	{
 		fileService.addTags(fileAddTags);
 		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, UrlMappings.ACTION_LIST);
+	}
+
+	@RequestMapping(value = UrlMappings.ACTION_EDIT, method = RequestMethod.GET)
+	public String edit(@PathVariable("id") Integer id, Model model)
+	{
+		FileDto file = fileService.find(id);
+
+		if (file == null)
+			throw new NotFoundException(String.valueOf(id));
+
+		model.addAttribute("file", file);
+		model.addAttribute("allTags", tagService.findAllGroupedByType());
+
+		return ViewEnum.FILE_EDIT.getViewName();
+	}
+
+	@RequestMapping(
+		value = UrlMappings.ACTION_UPDATE,
+		method = RequestMethod.POST
+	)
+	public String update(@ModelAttribute("file") @Valid FileDto file, BindingResult bindingResult, Model model)
+	{
+		fileService.update(file);
+
+		return UrlMappings.redirect(UrlMappings.CONTROLLER_FILE, "/edit/" + file.getId());
 	}
 }

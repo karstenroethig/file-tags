@@ -14,6 +14,7 @@ public enum ViewEnum
 	WORKSPACE_INFO(ControllerEnum.workspace, "info"),
 
 	FILE_LIST(ControllerEnum.file, ActionEnum.list),
+	FILE_EDIT(ControllerEnum.file, ActionEnum.edit),
 
 	GALLERY_LIST(ControllerEnum.gallery, ActionEnum.list),
 	GALLERY_SHOW(ControllerEnum.gallery, ActionEnum.show),

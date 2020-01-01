@@ -1,6 +1,23 @@
 
 $( document ).ready( function() {
 
+	$('[data-toggle="popover"]').popover({
+		html: true
+	});
+
+	$('[data-toggle=popover]').on('click', function (e) {
+		$('[data-toggle=popover]').not(this).popover('hide');
+	});
+	$('.popoverAddTag').on('shown.bs.popover', function () {
+		$('#addTagInput').val('Test');
+	});
+	$('.popoverRename').on('shown.bs.popover', function () {
+		$('#renameInput').val('Test');
+	});
+	$('.popoverMove').on('shown.bs.popover', function () {
+		$('#moveInput').val('Test');
+	});
+
 	// remove tag modal: transfer the id to the modal form
 	$( '#removeTagModal' ).on( 'show.bs.modal', function( event ) {
 		var button = $( event.relatedTarget ); // Button that triggered the modal

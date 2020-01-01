@@ -1,17 +1,25 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout :: layout-fragment(
+							~{::title},
+							~{::content},
+							null,
+							null,
+							'admin'
+							)}">
 <head>
+	<title th:text="#{application.title-pattern(#{application.name}, #{utility.serverInfo.label})}">Server Info</title>
 </head>
-<body th:with="menu='admin',submenu='server-info'">
+<body>
 
-	<div layout:fragment="content">
-	
+	<div th:fragment="content">
+
 		<div class="container">
-		
+
 			<h1 style="padding-top: 10px;" th:text="#{utility.serverInfo.label}">Server Info</h1>
-		
-			<div th:replace="fragments/messages"></div>
-			
+
+			<div th:replace="~{fragments/messages :: messages-fragment(${messages})}"></div>
+
 			<table class="table table-hover">
 				<tr>
 					<th width="20%" th:text="#{utility.serverInfo.systemInfo.version.label}">Server Version</th>
@@ -26,7 +34,7 @@
 					<td th:text="${serverInfo.systemInfo.uptime}"></td>
 				</tr>
 			</table>
-			
+
 			<fieldset>
 				<legend th:text="#{utility.serverInfo.memoryInfo.label}">Memory</legend>
 				<table class="table table-hover">
@@ -46,7 +54,7 @@
 					</tr>
 				</table>
 			</fieldset>
-			
+
 			<fieldset>
 				<legend th:text="#{utility.serverInfo.systemInfo.label}">System</legend>
 				<table class="table table-hover">
@@ -106,7 +114,7 @@
 					</tr>
 				</table>
 			</fieldset>
-			
+
 		</div>
 
 	</div>

@@ -1,11 +1,27 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+</head>
+<body>
 
-<!-- Bootstrap -->
-<!-- link rel="stylesheet" th:href="@{'/webjars/bootstrap/'+#{application.dependency.bootstrap}+'/css/bootstrap.min.css'}"/-->
-<link rel="stylesheet" th:href="@{'/webjars/bootswatch-superhero/'+#{application.dependency.bootswatch-superhero}+'/bootstrap.min.css'}"/>
+	<th:block th:fragment="style-fragment">
 
-<!-- Font Awesome -->
-<script defer th:src="@{'/webjars/font-awesome/'+#{application.dependency.fontawesome}+'/js/all.min.js'}"></script>
+		<!-- Bootstrap -->
+		<!-- link rel="stylesheet" th:href="@{'/webjars/bootstrap/'+#{application.dependency.bootstrap}+'/css/bootstrap.min.css'}"/-->
+		<link rel="stylesheet" th:href="@{'/webjars/bootswatch-superhero/'+#{application.dependency.bootswatch-superhero}+'/bootstrap.min.css'}"/>
 
-<!-- App style -->
-<link rel="stylesheet" th:href="@{/css/style.css}" />
+		<!-- Font Awesome -->
+		<link rel="stylesheet" th:href="@{'/webjars/font-awesome/'+#{application.dependency.fontawesome}+'/css/all.min.css'}"/>
+
+		<!-- Select2 -->
+		<link rel="stylesheet" th:href="@{'/webjars/select2/'+#{application.dependency.select2}+'/css/select2.min.css'}"/>
+		<link rel="stylesheet" th:href="@{/css/select2.css}" />
+
+		<!-- App style -->
+		<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+	</th:block>
+
+</body>
+</html>

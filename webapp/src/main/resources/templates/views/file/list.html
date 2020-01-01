@@ -1,42 +1,22 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout :: layout-fragment(
+							~{::title},
+							~{::content},
+							null,
+							~{:: #additionalJs},
+							'file'
+							)}">
 <head>
-	<!-- Select2 -->
-	<link rel="stylesheet" th:href="@{'/webjars/select2/'+#{application.dependency.select2}+'/css/select2.min.css'}"/>
-	<style>
-		.select2-container--default .select2-selection--multiple .select2-selection__choice {
-			background-color: #DF691A;
-			color: #FFFFFF;
-			border: 0;
-			border-radius: 0;
-		}
-
-		.select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
-			color: lightgrey;
-		}
-
-		.select2-container--default .select2-selection--multiple .select2-selection__clear {
-			color: lightgrey;
-		}
-
-		.select2-container {
-			color: #495057;
-		}
-
-		.select2-container--default .select2-selection--multiple,
-		.select2-container--default .select2-selection--multiple .select2-selection__choice {
-			border: 1px solid transparent;
-			border-radius: 0;
-		}
-	</style>
+	<title th:text="#{application.title-pattern(#{application.name}, #{file.label.plural})}">Files</title>
 </head>
-<body th:with="menu='file'">
+<body>
 
-	<div layout:fragment="content">
+	<div th:fragment="content">
 
 		<div class="container">
 
-			<div class="card" style="margin-top: 10px;">
+			<div class="card mt-3 mb-5">
 				<h5 class="card-header">Search</h5>
 				<div class="card-body">
 					<form th:object="${searchParams}" th:action="@{/file/search}" action="#" method="post">
@@ -64,9 +44,9 @@
 				</div>
 			</div>
 
-			<div th:replace="fragments/messages"></div>
+			<div th:replace="~{fragments/messages :: messages-fragment(${messages})}"></div>
 
-			<table class="table table-hover mt-5">
+			<table class="table table-hover">
 				<tbody>
 					<tr th:if="${#lists.isEmpty(page.files)}">
 						<td align="center" th:text="#{default.table.empty.text}">Data can not be found.</td>
@@ -79,14 +59,14 @@
 								<span th:if="${file.isNew()}" class="badge badge-pill badge-warning">new</span>
 							</div>
 							<div>
-								<a class="popoverAddTag text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" th:attr="data-content='<form action=\''+@{/file/add-tag}+'\' method=\'post\' class=\'form-inline\'><input type=\'hidden\' name=\'id\' value=\''+${file.id}+'\'/><div class=\'form-group\'><input class=\'form-control form-control-sm\' type=\'text\' name=\'tagNames\' id=\'addTagInput\'></div>&nbsp;<div class=\'form-group\'><button type=\'submit\' class=\'btn btn-primary btn-sm\'>OK</button></div></form>'" data-original-title="Add tag">add tag</a>
+								<a th:href="@{/file/edit/{id}(id=${file.id})}" class="text-muted">edit</a>
 								&nbsp;
-								<a class="popoverRename text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" data-content="<input type='text' id='renameInput'>" data-original-title="Rename">rename</a>
+								<a class="text-muted" href="#">rename</a>
 								&nbsp;
-								<a class="popoverMove text-muted" href="javascript://" data-container="body" data-toggle="popover" data-placement="right" data-content="<input type='text' id='moveInput'>" data-original-title="Move">move</a>
+								<a class="text-muted" href="#">move</a>
 							</div>
 							<div th:if="${!#lists.isEmpty(file.tags)}">
-								<a th:each="tag : ${file.tags}" href="" class="badge badge-pill" th:classappend="${tag.type.styleClass}" style="text-decoration: none;" data-toggle="modal" data-target="#removeTagModal" th:attr="data-file-id=${file.id},data-tag-id=${tag.id}" th:text="${tag.name}">[tag.name]</a>
+								<span th:each="tag : ${file.tags}" class="badge badge-pill mr-1" th:classappend="${tag.type.styleClass}"th:text="${tag.name}">[tag.name]</span>
 							</div>
 						</td>
 						<td class="text-right">
@@ -105,57 +85,11 @@
 			</div>
 		</div>
 
-		<div class="modal fade" id="removeTagModal" tabindex="-1" role="dialog" aria-labelledby="removeTagModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="removeTagModalLabel">Remove tag</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<span>Do you really want to remove the tag from this file?</span>
-					</div>
-					<div class="modal-footer">
-						<a href="" th:attr="data-href-template=@{/file/{fileId}/remove-tag/{tagId}}" class="btn btn-danger">Remove</a>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{default.button.cancel.label}">Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</div>
 
-	<div layout:fragment="additionalJs">
+	<th:block id="additionalJs">
 		<script th:src="@{/js/file-list.js}"></script>
-		<!-- Select2 -->
-		<script th:src="@{'/webjars/select2/'+#{application.dependency.select2}+'/js/select2.min.js'}"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('.select2-multiple').select2({
-					'allowClear': true
-				});
-
-				$('[data-toggle="popover"]').popover({
-					html: true
-				});
-
-				$('[data-toggle=popover]').on('click', function (e) {
-					$('[data-toggle=popover]').not(this).popover('hide');
-				});
-				$('.popoverAddTag').on('shown.bs.popover', function () {
-					$('#addTagInput').val('Test');
-				});
-				$('.popoverRename').on('shown.bs.popover', function () {
-					$('#renameInput').val('Test');
-				});
-				$('.popoverMove').on('shown.bs.popover', function () {
-					$('#moveInput').val('Test');
-				});
-			});
-		</script>
-	</div>
+	</th:block>
 
 </body>
 </html>

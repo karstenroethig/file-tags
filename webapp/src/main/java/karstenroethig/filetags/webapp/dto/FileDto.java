@@ -27,4 +27,9 @@ public class FileDto
 	{
 		tags.add(tag);
 	}
+
+	public void clearTags()
+	{
+		tags.clear();
+	}
 }

@@ -40,15 +40,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.nekohtml</groupId>
-			<artifactId>nekohtml</artifactId>
-		</dependency>
-		<dependency>
-			<!-- see https://github.com/thymeleaf/thymeleaf-extras-java8time -->
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-java8time</artifactId>
-		</dependency>
 
 		<!-- WebJARs -->
 		<dependency>
@@ -88,6 +79,18 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
+		</dependency>
+
+		<!-- JAXB -->
+		<!-- JAXB API -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<!-- JAXB reference implementation -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
 		</dependency>
 
 		<!-- Lombok -->
@@ -144,39 +147,28 @@
 		<plugins>
 
 			<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>schema-generate-directory-info</id>
 						<goals>
-							<goal>generate</goal>
+							<goal>xjc</goal>
 						</goals>
 						<phase>generate-sources</phase>
-						<configuration>
-							<schemaDirectory>schema</schemaDirectory>
-							<schemaIncludes>
-								<include>directory-info.xsd</include>
-							</schemaIncludes>
-							<extension>true</extension>
-							<removeOldOutput>true</removeOldOutput>
-							<generateDirectory>${project.build.directory}/generated-sources/directory-info-jaxb</generateDirectory>
-						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
+				<configuration>
+					<xjbSources>
+						<xjbSource>schema/global.xjb</xjbSource>
+					</xjbSources>
+					<sources>
+						<source>schema/directory-info.xsd</source>
+					</sources>
+					<outputDirectory>${project.build.directory}/generated-sources/directory-info-jaxb</outputDirectory>
+					<packageName>karstenroethig.filetags.webapp.domain</packageName>
+					<clearOutputDir>false</clearOutputDir>
+				</configuration>
 			</plugin>
 
 			<!-- Mit dem spring-boot-maven-plugin wird das Spring Boot Uber-Jar erzeugt. -->

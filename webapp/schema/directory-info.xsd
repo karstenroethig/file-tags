@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
-
-	<!-- This tells JAXB what package to create the Java classes in. -->
-	<xsd:annotation>
-		<xsd:appinfo>
-			<jaxb:schemaBindings>
-				<jaxb:package name="karstenroethig.filetags.webapp.domain"/>
-			</jaxb:schemaBindings>
-		</xsd:appinfo>
-	</xsd:annotation>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
 	<xsd:element name="directoryInfo">
 		<xsd:complexType>

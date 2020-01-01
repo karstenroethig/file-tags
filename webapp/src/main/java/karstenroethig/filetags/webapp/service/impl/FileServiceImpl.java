@@ -160,4 +160,20 @@ public class FileServiceImpl
 			}
 		tagService.sort(fileDto.getTags());
 	}
+
+	public void update(FileDto fileChangedDto)
+	{
+		FileDto fileDto = find(fileChangedDto.getId());
+		if (fileDto == null)
+			return;
+
+		fileDto.clearTags();
+
+		for (TagDto tagDto : fileChangedDto.getTags())
+		{
+			fileDto.addTag(tagService.find(tagDto.getId()));
+		}
+
+		tagService.sort(fileDto.getTags());
+	}
 }

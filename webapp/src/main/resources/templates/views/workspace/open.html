@@ -1,10 +1,18 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout :: layout-fragment(
+							~{::title},
+							~{::content},
+							null,
+							~{:: #additionalJs},
+							'workspace'
+							)}">
 <head>
+	<title th:text="#{application.title-pattern(#{application.name}, #{workspace.open.label})}"></title>
 </head>
-<body th:with="menu='workspace'">
+<body>
 
-	<div layout:fragment="content">
+	<div th:fragment="content">
 
 		<div class="container">
 
@@ -31,9 +39,9 @@
 
 	</div>
 
-	<div layout:fragment="additionalJs">
+	<th:block id="additionalJs">
 		<script th:src="@{/js/workspace-open.js}"></script>
-	</div>
+	</th:block>
 
 </body>
 </html>
