@@ -34,6 +34,7 @@ import karstenroethig.filetags.webapp.dto.TagDto;
 import karstenroethig.filetags.webapp.dto.WorkspaceDto;
 import karstenroethig.filetags.webapp.dto.enums.TagTypeEnum;
 import karstenroethig.filetags.webapp.service.exceptions.TagAlreadyExistsException;
+import karstenroethig.filetags.webapp.util.FilesizeUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -121,14 +122,19 @@ public class WorkspaceServiceImpl
 
 	private FileDto transform(File file)
 	{
-		Path pathToFile = Paths.get(SELECTED_WORKSPACE.getPathToDir(), file.getPath(), file.getName());
+		Path pathToFile;
+		if (file.getPath() != null)
+			pathToFile = Paths.get(SELECTED_WORKSPACE.getPathToDir(), file.getPath(), file.getName());
+		else
+			pathToFile = Paths.get(SELECTED_WORKSPACE.getPathToDir(), file.getName());
 
 		FileDto fileDto = new FileDto();
 		fileDto.setFilename(file.getName());
-		fileDto.setPathToDir(file.getPath() != null ? StringUtils.replace(file.getPath().toString(), "/", " / ") : null);
+		fileDto.setPathToDirFormatted(file.getPath() != null ? StringUtils.replace(file.getPath().toString(), "/", " / ") : null);
 		fileDto.setSize(file.getSize().longValue());
+		fileDto.setSizeFormatted(FilesizeUtils.formatFilesize(file.getSize().longValue()));
 		fileDto.setHash(file.getHash());
-		fileDto.setFileUrl(pathToFile.toUri().toString());
+		fileDto.setPathToFile(pathToFile);
 
 		String[] tagNames = StringUtils.split(file.getTags(), ',');
 		if (tagNames != null)
@@ -232,7 +238,7 @@ public class WorkspaceServiceImpl
 	{
 		File file = OBJECT_FACTORY.createFile();
 		file.setName(fileDto.getFilename());
-		file.setPath(fileDto.getPathToDir() != null ? StringUtils.replace(fileDto.getPathToDir(), " / ", "/") : null);
+		file.setPath(fileDto.getPathToDirFormatted() != null ? StringUtils.replace(fileDto.getPathToDirFormatted(), " / ", "/") : null);
 		file.setSize(BigInteger.valueOf(fileDto.getSize()));
 		file.setHash(fileDto.getHash());
 		file.setTags(String.join(",", fileDto.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toList())));
@@ -246,13 +252,15 @@ public class WorkspaceServiceImpl
 		Path relativeFileDirPath = relativeFilePath.getParent();
 
 		FileDto fileDto = new FileDto();
-		fileDto.setPathToDir(relativeFileDirPath != null ? StringUtils.replace(relativeFileDirPath.toString(), "/", " / ") : null);
+		fileDto.setPathToDirFormatted(relativeFileDirPath != null ? StringUtils.replace(relativeFileDirPath.toString(), "/", " / ") : null);
 		fileDto.setFilename(relativeFilePath.getFileName().toString());
-		fileDto.setFileUrl(filePath.toUri().toString());
+		fileDto.setPathToFile(filePath);
 
 		try (InputStream inputStream = Files.newInputStream(filePath))
 		{
-			fileDto.setSize(Files.size(filePath));
+			long fileSize = Files.size(filePath);
+			fileDto.setSize(fileSize);
+			fileDto.setSizeFormatted(FilesizeUtils.formatFilesize(fileSize));
 			fileDto.setHash(DigestUtils.md5Hex(inputStream));
 		}
 		catch (IOException ex)

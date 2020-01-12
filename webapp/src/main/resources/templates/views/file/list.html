@@ -53,7 +53,7 @@
 					</tr>
 					<tr th:each="file : ${page.files}">
 						<td>
-							<div th:if="${file.pathToDir != null}" class="text-muted" th:text="${file.pathToDir}">[pathToDir]</div>
+							<div th:if="${file.pathToDirFormatted != null}" class="text-muted" th:text="${file.pathToDirFormatted}">[pathToDirFormatted]</div>
 							<div class="lead">
 								<strong th:text="${file.filename}">[filename]</strong>
 								<span th:if="${file.isNew()}" class="badge badge-pill badge-warning">new</span>
@@ -70,7 +70,7 @@
 							</div>
 						</td>
 						<td class="text-right">
-							<a th:href="${file.fileUrl}" class="btn btn-primary"><i class="fas fa-play"></i></a>
+							<a href="#" class="btn btn-primary"><i class="fas fa-play"></i></a>
 						</td>
 					</tr>
 				</tbody>

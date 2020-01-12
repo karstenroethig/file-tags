@@ -16,7 +16,7 @@
 
 		<div class="container pt-3">
 
-			<div th:if="${file.pathToDir != null}" class="text-muted" th:text="${file.pathToDir}">[pathToDir]</div>
+			<div th:if="${file.pathToDirFormatted != null}" class="text-muted" th:text="${file.pathToDirFormatted}">[pathToDirFormatted]</div>
 			<div class="lead">
 				<strong th:text="${file.filename}">[filename]</strong>
 				<span th:if="${file.isNew()}" class="badge badge-pill badge-warning">new</span>
@@ -42,13 +42,17 @@
 					</div>
 					<div class="card-footer">
 						<p class="lead font-italic">
-							<span>File size</span>: <span>[sizeFormatted]</span>
+							<span>File size</span>: <span th:text="${file.sizeFormatted}">[sizeFormatted]</span>
 						</p>
 					</div>
 				</div>
 			</div>
 
 			<div class="container-body offset-4 col-8 pt-3" style="/*background-color: #957bbe; height: 8rem;*/">
+				<video style="width: 800px; max-width:100%;" controls preload="none">
+					<source th:src="@{/file/video/{id}(id=${file.id})}" type="video/mp4">
+					Your browser does not support HTML5 video.
+				</video>
 				<p class="text-center text-muted">
 					<i class="fas fa-exclamation-circle fa-10x"></i>
 				</p>

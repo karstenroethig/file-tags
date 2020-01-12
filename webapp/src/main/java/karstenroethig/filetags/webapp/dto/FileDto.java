@@ -1,5 +1,6 @@
 package karstenroethig.filetags.webapp.dto;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,12 @@ import lombok.Setter;
 public class FileDto
 {
 	private Integer id;
-	private String pathToDir;
+	private String pathToDirFormatted;
 	private String filename;
 	private Long size;
+	private String sizeFormatted;
 	private String hash;
-	private String fileUrl;
+	private Path pathToFile;
 	private List<TagDto> tags = new ArrayList<>();
 
 	public boolean isNew()

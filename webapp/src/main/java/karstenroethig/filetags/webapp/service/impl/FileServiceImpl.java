@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import karstenroethig.filetags.webapp.dto.FileAddTagsDto;
 import karstenroethig.filetags.webapp.dto.FileDto;
 import karstenroethig.filetags.webapp.dto.FilePageDto;
 import karstenroethig.filetags.webapp.dto.FileSearchDto;
@@ -62,7 +61,7 @@ public class FileServiceImpl
 			}
 			catch (FileAlreadyExistsException ex)
 			{
-				log.warn(String.format("file already exists [%s, %s, %s]", file.getFilename(), file.getHash(), file.getPathToDir()));
+				log.warn(String.format("file already exists [%s, %s, %s]", file.getFilename(), file.getHash(), file.getPathToFile()));
 			}
 		}
 	}
@@ -142,23 +141,6 @@ public class FileServiceImpl
 		FILES_BY_ID.clear();
 		FILES_BY_HASH.clear();
 		ID_GENARATOR.set(0);
-	}
-
-	public void addTags(FileAddTagsDto fileAddTags)
-	{
-		FileDto fileDto = find(fileAddTags.getId());
-		if (fileDto == null)
-			return;
-
-		String[] tagNames = StringUtils.split(fileAddTags.getTagNames(), ',');
-		if (tagNames != null)
-			for (String tagName : tagNames)
-			{
-				TagDto tag = tagService.findByName(StringUtils.trim(tagName));
-				if (tag != null)
-					fileDto.addTag(tag);
-			}
-		tagService.sort(fileDto.getTags());
 	}
 
 	public void update(FileDto fileChangedDto)
